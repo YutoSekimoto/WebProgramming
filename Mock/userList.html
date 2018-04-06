@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="css/origin/list.css">
+</head>
+<body>
+<div class = "contain">
+
+<!-- トップ -->
+<div class = "top">
+
+<span>ユーザ名&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<small><a href = "login.html">ログアウト</a></small></span>
+
+</div>
+
+<!-- センター -->
+<div class = "list-area">
+
+<h3>ユーザ一覧</h3>
+
+<p><a href = "userTouroku.html">新規登録</a></p>
+
+
+<form class = "form-area">
+
+  <div class="form-group row">
+    <label for="inputLogin" class="col-sm-3 col-form-label"><nobr>ログインID</nobr></label>
+    <div class="col-sm-9">
+      <input type="text" class="form-control" id="inputLogin" placeholder="Login">
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="inputPassword" class="col-sm-3 col-form-label"><nobr>Password</nobr></label>
+    <div class="col-sm-9">
+      <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="inputBirthday" class="col-sm-3 col-form-label"><nobr>生年月日</nobr></label>
+    <div class="col-sm-9">
+      <input type="text" class="form-control" id="inputBirthday" placeholder="生年月日">
+    </div>
+  </div>
+
+  <div class ="login-button">
+    <button type="button" class="btn btn-secondary">検索</button>
+  </div>
+
+</form>
+
+</div>
+
+<!-- ボトム -->
+<div class = "bottom">
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th scope="col">ログインID</th>
+      <th scope="col">ユーザ名</th>
+      <th scope="col">生年月日</th>
+      <th scope="col">ボタン</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>id0001</td>
+      <td>田中太郎</td>
+      <td>1989年04月26日</td>
+      <td>
+        <a href = "userDetail.html"><button type="button" class="btn btn-primary">詳細</button></a>
+        <a href = "userUpdate.html"><button type="button" class="btn btn-success">更新</button></a>
+        <a href = "userDelete.html"><button type="button" class="btn btn-danger">削除</button></a>
+      </td>
+    </tr>
+    <tr>
+      <td>id0002</td>
+      <td>佐藤二郎</td>
+      <td>2001年11月12日</td>
+      <td>
+        <a href = "userDetail.html"><button type="button" class="btn btn-primary">詳細</button></a>
+        <a href = "userUpdate.html"><button type="button" class="btn btn-success">更新</button></a>
+        <a href = "userDelete.html"><button type="button" class="btn btn-danger">削除</button></a>
+      </td>
+    </tr>
+    <tr>
+      <td>id0003</td>
+      <td>佐川真司</td>
+      <td>2000年01月01日</td>
+      <td>
+        <a href = "userDetail.html"><button type="button" class="btn btn-primary">詳細</button></a>
+        <a href = "userUpdate.html"><button type="button" class="btn btn-success">更新</button></a>
+        <a href = "userDelete.html"><button type="button" class="btn btn-danger">削除</button></a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+</div>
+
+</div>
+</body>
+</html>
