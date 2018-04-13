@@ -73,8 +73,7 @@ public class UserDao {
             conn = DBManager.getConnection();
 
             // SELECT文を準備
-            // TODO: 未実装：管理者以外を取得するようSQLを変更する
-            String sql = "SELECT * FROM user";
+            String sql = "SELECT * FROM user where login_id not in ('admin')";
 
              // SELECTを実行し、結果表を取得
             Statement stmt = conn.createStatement();
@@ -264,7 +263,7 @@ public class UserDao {
     	            PreparedStatement pstmt = conn.prepareStatement(sql);
     	            //バインドパラメータにバインド]
     	            pstmt.setString(1,name);
-    	            pstmt.setString(2,password);
+    	            pstmt.setString(2, password);
     	            pstmt.setString(3,bDate);
     	            pstmt.setString(4,loginid);
     	            //UPDATE文を実行
@@ -355,17 +354,18 @@ public class UserDao {
     				// データベースへ接続
     	            conn = DBManager.getConnection();
 
-    	            //SELECT文の準備
-    	            String sql = " select * from user where login_id = ? and password like ? and  birth_date > ? and birth_date < ? ";
-    	            //PreparedStatementの準備
-    	            PreparedStatement pstmt = conn.prepareStatement(sql);
-    	            //バインドパラメータにバインド
-    	            pstmt.setString(1,loginId);
-    	            pstmt.setString(2, "%" + passWord + "%");
-    	            pstmt.setString(3, birthDate1);
-    	            pstmt.setString(4, birthDate2);
-    	            //SELECT文を実行
-    	            ResultSet rs = pstmt.executeQuery();
+    	            // SELECT文を準備
+    	            String sql = "SELECT * FROM user where login_id not in ('admin')";
+
+    	            if(!loginId.equals("")) {
+    	            	sql += "and login_id = '" + loginId + "'";
+    	            }
+
+
+
+    	             // SELECTを実行し、結果表を取得
+    	            Statement stmt = conn.createStatement();
+    	            ResultSet rs = stmt.executeQuery(sql);
 
     	            while(rs.next()) {
 

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import common.Comonn;
 import dao.UserDao;
 import model.User;
 
@@ -79,6 +80,9 @@ public class UserTourokuServlet extends HttpServlet {
 		String password2 = request.getParameter("password2");
 		String name = request.getParameter("name");
 		String bDate = request.getParameter("birthDate");
+
+		Comonn.convertPassword(password);
+		Comonn.convertPassword(password2);
 
 		//日付パラメーター
 		Date date = new Date();
