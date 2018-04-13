@@ -9,7 +9,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import common.Comonn;
 import model.User;
 
 public class UserDao {
@@ -32,7 +31,7 @@ public class UserDao {
              // SELECTを実行し、結果表を取得
             PreparedStatement pStmt = conn.prepareStatement(sql);
             pStmt.setString(1, loginId);
-            pStmt.setString(2, Comonn.convertPassword(password));
+            pStmt.setString(2, password);
             ResultSet rs = pStmt.executeQuery();
 
              // 主キーに紐づくレコードは1件のみなので、rs.next()は1回だけ行う
@@ -112,68 +111,298 @@ public class UserDao {
         return userList;
     }
 
-    public String upDate(String loginId , String password , String password2 , String name , String birthDate){
+    public String userTouroku(String loginId , String name , String bDate , String  password , String cDate , String uDate ) {
+
+		//データベース設定
+		Connection conn = null;
+        try {
+            // データベースへ接続
+            conn = DBManager.getConnection();
+
+            //既存のログインIDの確認
+            //SELECT文の準備
+            String sql1=" select * from user where login_id = ? ";
+            //PreparedStatementの準備
+            PreparedStatement pstmt1 = conn.prepareStatement(sql1);
+            //バインドパラメータにバインド
+            pstmt1.setString(1,loginId);
+            //SELECT文を実行
+            ResultSet rs = pstmt1.executeQuery();
+
+            while(rs.next()) {
+
+            	String eM = "失敗";
+    			return eM;
+
+            }
+
+            //INSERT文の準備
+            String sql=" insert into user (login_id,name,birth_date,password,create_date,update_date) values (?,?,?,?,?,?)";
+            //PreparedStatementの準備
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            //バインドパラメータにバインド
+            pstmt.setString(1,loginId);
+            pstmt.setString(2,name);
+            pstmt.setString(3,bDate);
+            pstmt.setString(4,password);
+            pstmt.setString(5,cDate);
+            pstmt.setString(6,uDate);
+            //INSERT文を実行
+            int num = pstmt.executeUpdate();
+
+            String eM = "成功";
+            return eM;
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            // データベース切断
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+        }
+
+    }
+
+    public User userDetail(String loginid) {
+
+
+		//データベース設定
+		Connection conn = null;
+		try {
+			// データベースへ接続
+            conn = DBManager.getConnection();
+
+            //SELECT文の準備
+            String sql = " select * from user where login_id = ? ";
+            //PreparedStatementの準備
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            //バインドパラメータにバインド
+            pstmt.setString(1,loginid);
+            //SELECT文を実行
+            ResultSet rs = pstmt.executeQuery();
+
+            while(rs.next()) {
+
+            	int id = rs.getInt("id");
+            	String lId = rs.getString("login_id");
+            	String name = rs.getString("name");
+            	Date bDate = rs.getDate("birth_date");
+            	String password = rs.getString("password");
+            	String cDate = rs.getString("create_date");
+            	String uDate = rs.getString("update_date");
+
+            	//リクエストスコープに保存するインスタンス
+            	User user = new User(id , lId , name , bDate , password , cDate , uDate);
+            	return user;
+
+            }
+
+
+		    } catch (SQLException e) {
+
+		        e.printStackTrace();
+		        return null;
+
+		    } finally {
+
+		    	// データベース切断
+	            if (conn != null) {
+	                try {
+	                    conn.close();
+	                } catch (SQLException e) {
+	                    e.printStackTrace();
+	                    return null;
+	                }
+	            }
+
+		    }
+
+		return null;
+
+    }
+
+    public String userUpdate(String loginid , String password , String password2 , String name , String bDate) {
 
     	//データベース設定
     			Connection conn = null;
-    	        try {
-    	            // データベースへ接続
+
+    			try {
+
+    				// データベースへ接続
     	            conn = DBManager.getConnection();
 
-    	            //既存のログインIDの確認
-    	            //SELECT文の準備
-    	            String sql1=" select * from user where login_id = ? ";
-    	            //PreparedStatementの準備
-    	            PreparedStatement pstmt1 = conn.prepareStatement(sql1);
-    	            //バインドパラメータにバインド
-    	            pstmt1.setString(1,loginId);
-    	            //SELECT文を実行
-    	            ResultSet rs = pstmt1.executeQuery();
+    	            //パスワードとパスワード(確認)がどちらも空の場合
+    	            if(password == "" && password2 == "") {
 
+    	            	    //UPDATE文の準備
+    	                String sql = " update user set name = ? , birth_date = ? where login_id = ? ";
+    	                //PreparedStatementの準備
+    	                PreparedStatement pstmt = conn.prepareStatement(sql);
+    	                //バインドパラメータにバインド]
+    	                pstmt.setString(1,name);
+    	                pstmt.setString(2,bDate);
+    	                pstmt.setString(3,loginid);
+    	                //UPDATE文を実行
+    	                int result = pstmt.executeUpdate();
 
-    	            while(rs.next()) {
-
-    	            	/*
-    	            	//リクエストにエラーメッセージをセット
-    	    			request.setAttribute("eM", "入力したログインIDは既に使用されています");
-
-    	    			//フォワード(ユーザ新規登録)
-    	    			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/userTouroku.jsp");
-    	    			dispatcher.forward(request, response);
-    	    			*/
-    	    			return "入力したログインIDは既に使用されています";
+    	                String message = "成功1";
+    	                return message;
 
     	            }
 
-    	            //INSERT文の準備
-    	            String sql=" insert into user (login_id,name,birth_date,password,create_date,update_date) values (?,?,?,?,?,?)";
+    	            //UPDATE文の準備
+    	            String sql = " update user set name = ? , password = ? , birth_date = ? where login_id = ? ";
+    	            //PreparedStatementの準備
+    	            PreparedStatement pstmt = conn.prepareStatement(sql);
+    	            //バインドパラメータにバインド]
+    	            pstmt.setString(1,name);
+    	            pstmt.setString(2,password);
+    	            pstmt.setString(3,bDate);
+    	            pstmt.setString(4,loginid);
+    	            //UPDATE文を実行
+    	            int result = pstmt.executeUpdate();
+
+    		    } catch (SQLException e) {
+
+    		    	  e.printStackTrace();
+    				  return null;
+
+    			  } finally {
+
+    				  // データベース切断
+    				  if (conn != null) {
+    					  try {
+    						  conn.close();
+    				      } catch (SQLException e) {
+    				    	  e.printStackTrace();
+    				          return null;
+    				      }
+    				  }
+
+    			  }
+
+    			//登録に成功した場合
+    			String message = "成功2";
+    			return message;
+
+    }
+
+    public String userDelete(String loginid) {
+
+    	        //データベース設定
+    			Connection conn = null;
+
+    					try {
+
+    						// データベースへ接続
+    			            conn = DBManager.getConnection();
+
+    			            //SELECT文の準備
+    			            String sql = " delete from user where login_id = ? ";
+    			            //PreparedStatementの準備
+    			            PreparedStatement pstmt = conn.prepareStatement(sql);
+    			            //バインドパラメータにバインド]
+    			            pstmt.setString(1,loginid);
+    			            //SELECT文を実行
+    			            int result = pstmt.executeUpdate();
+
+    			            if(result != 0) {
+
+    			            	String message = "成功";
+    			            	return "成功";
+
+    			            }
+
+    				    } catch (SQLException e) {
+
+    				    	  e.printStackTrace();
+    					  return null;
+
+    					  } finally {
+
+    						  // データベース切断
+    						  if (conn != null) {
+    							  try {
+    								  conn.close();
+    						      } catch (SQLException e) {
+    						    	  e.printStackTrace();
+    						          return null;
+    						      }
+    						  }
+
+    					  }
+
+    					return null;
+
+    }
+
+    public User userSearch(String loginId , String passWord , String birthDate1 , String birthDate2) {
+
+    //	String passwordPstmt = "%" + passWord + "%";
+
+    	        //データベース設定
+    			Connection conn = null;
+    			try {
+
+    				// データベースへ接続
+    	            conn = DBManager.getConnection();
+
+    	            //SELECT文の準備
+    	            String sql = " select * from user where login_id = ? and password like ? and  birth_date > ? and birth_date < ? ";
     	            //PreparedStatementの準備
     	            PreparedStatement pstmt = conn.prepareStatement(sql);
     	            //バインドパラメータにバインド
     	            pstmt.setString(1,loginId);
-    	            pstmt.setString(2,name);
-    	            pstmt.setString(3,birthDate);
-    	            pstmt.setString(4,password);
-    	            pstmt.setString(5,birthDate);
-    	            pstmt.setString(6,birthDate);
-    	            //INSERT文を実行
-    	            int num = pstmt.executeUpdate();
+    	            pstmt.setString(2, "%" + passWord + "%");
+    	            pstmt.setString(3, birthDate1);
+    	            pstmt.setString(4, birthDate2);
+    	            //SELECT文を実行
+    	            ResultSet rs = pstmt.executeQuery();
 
-    	        } catch (SQLException e) {
-    	            e.printStackTrace();
-    	            return null;
-    	        } finally {
-    	            // データベース切断
-    	            if (conn != null) {
-    	                try {
-    	                    conn.close();
-    	                } catch (SQLException e) {
-    	                    e.printStackTrace();
-    	                    return null;
-    	                }
+    	            while(rs.next()) {
+
+    	            	int id = rs.getInt("id");
+    	            	String lId = rs.getString("login_id");
+    	            	String name = rs.getString("name");
+    	            	Date bDate = rs.getDate("birth_date");
+    	            	String password = rs.getString("password");
+    	            	String cDate = rs.getString("create_date");
+    	            	String uDate = rs.getString("update_date");
+
+    	            	//リクエストスコープに保存するインスタンス
+    	            	User user = new User(id , lId , name , bDate , password , cDate , uDate);
+    	            	return user;
+
     	            }
-    	        }
-				return "入力されたログインIDは既に使用されています";
+
+    			    } catch (SQLException e) {
+
+    			        e.printStackTrace();
+    			        return null;
+
+    			    } finally {
+
+    			    	// データベース切断
+    		            if (conn != null) {
+    		                try {
+    		                    conn.close();
+    		                } catch (SQLException e) {
+    		                    e.printStackTrace();
+    		                    return null;
+    		                }
+    		            }
+
+    			    }
+
+    			return null;
 
     }
 

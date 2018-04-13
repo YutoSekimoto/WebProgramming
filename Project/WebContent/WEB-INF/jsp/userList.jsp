@@ -15,7 +15,7 @@
 <!-- トップ -->
 <div class = "top">
 
-<span>ユーザ名 <c:out value = "${userName.name}"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<small><a href = "login.html">ログアウト</a></small></span>
+<span>ユーザ名 <c:out value = "${userName.name}"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<small><a href = "UserLogoutServlet">ログアウト</a></small></span>
 
 </div>
 
@@ -24,34 +24,41 @@
 
 <h3>ユーザ一覧</h3>
 
-<p><a href = "userTouroku.html">新規登録</a></p>
+<p><a href = "UserTourokuServlet">新規登録</a></p>
 
 
-<form class = "form-area">
+<form class = "form-area" method = "post" action = "UserSearchServlet">
 
   <div class="form-group row">
     <label for="inputLogin" class="col-sm-3 col-form-label"><nobr>ログインID</nobr></label>
     <div class="col-sm-9">
-      <input type="text" class="form-control" id="inputLogin" placeholder="Login">
+      <input type="text" class="form-control" id="inputLogin" placeholder="Login" name = "loginId">
     </div>
   </div>
 
   <div class="form-group row">
     <label for="inputPassword" class="col-sm-3 col-form-label"><nobr>Password</nobr></label>
     <div class="col-sm-9">
-      <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+      <input type="password" class="form-control" id="inputPassword" placeholder="Password" name = "password">
     </div>
   </div>
 
   <div class="form-group row">
-    <label for="inputBirthday" class="col-sm-3 col-form-label"><nobr>生年月日</nobr></label>
+    <label for="inputBirthday" class="col-sm-3 col-form-label"><nobr>生年月日から</nobr></label>
     <div class="col-sm-9">
-      <input type="text" class="form-control" id="inputBirthday" placeholder="生年月日">
+      <input type="text" class="form-control" id="inputBirthday" placeholder="生年月日から" name = "birthDate1">
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="inputBirthday" class="col-sm-3 col-form-label"><nobr>生年月日まで</nobr></label>
+    <div class="col-sm-9">
+      <input type="text" class="form-control" id="inputBirthday" placeholder="生年月日まで" name = "birthDate2">
     </div>
   </div>
 
   <div class ="login-button">
-    <button type="button" class="btn btn-secondary">検索</button>
+    <input type="submit" class="btn btn-secondary" value = "検索">
   </div>
 
 </form>

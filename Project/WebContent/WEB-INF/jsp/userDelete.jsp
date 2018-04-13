@@ -14,7 +14,7 @@
 
 <div class = "top">
 
-<span>ユーザ名&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<small><a href = "login.html">ログアウト</a></small></span>
+<span>ユーザ名&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<small><a href = "UserLogoutServlet">ログアウト</a></small></span>
 
 </div>
 
@@ -38,7 +38,7 @@
 
 </div>
 
-<a href = "">戻る</a>
+<a href = "javascript:history.back()">戻る</a>
 
 </div>
 </body>

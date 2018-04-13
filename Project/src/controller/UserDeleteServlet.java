@@ -2,9 +2,6 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,8 +9,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import dao.DBManager;
+import dao.UserDao;
+import model.User;
 
 /**
  * Servlet implementation class UserDeleteServlet
@@ -36,6 +35,21 @@ public class UserDeleteServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
+
+		//HttpSessionインスタンスの取得
+		HttpSession session = request.getSession();
+		//セッションスコープを取得
+		User userName = (User) session.getAttribute("userName");
+
+		//セッションスコープの有無の確認
+		if(userName == null) {
+
+			//サーブレットにリダイレクト(UserListServlet)
+			response.sendRedirect("UserLoginServlet");
+			return;
+
+		}
+
 		response.setContentType("text/html; charset=UTF-8");
 	    PrintWriter out = response.getWriter();
 
@@ -64,51 +78,22 @@ public class UserDeleteServlet extends HttpServlet {
 
 		//リクエストパラーメーター格納
 		String loginId = request.getParameter("loginid");
-		out.println(loginId);
+		UserDao userDao = new UserDao();
 
-		//データベース設定
-		Connection conn = null;
+		//結果を保存
+		String message = userDao.userDelete(loginId);
 
-				try {
+		if(message != null) {
 
-					// データベースへ接続
-		            conn = DBManager.getConnection();
+			//サーブレットにリダイレクト(UserListServlet)
+			response.sendRedirect("UserListServlet");
+			return;
 
-		            //SELECT文の準備
-		            String sql = " delete from user where login_id = ? ";
-		            //PreparedStatementの準備
-		            PreparedStatement pstmt = conn.prepareStatement(sql);
-		            //バインドパラメータにバインド]
-		            pstmt.setString(1,loginId);
-		            //SELECT文を実行
-		            int result = pstmt.executeUpdate();
+		}
 
-		            //SELECT文実行確認用
-		            out.println("データベース実行");
-		            out.println(result);
-
-			    } catch (SQLException e) {
-
-			    	  e.printStackTrace();
-					  return;
-
-				  } finally {
-
-					  // データベース切断
-					  if (conn != null) {
-						  try {
-							  conn.close();
-					      } catch (SQLException e) {
-					    	  e.printStackTrace();
-					          return;
-					      }
-					  }
-
-				  }
-
-				//サーブレットにリダイレクト(UserListServlet)
-				response.sendRedirect("UserListServlet");
-				return;
+		//サーブレットにリダイレクト(UserListServlet)
+		response.sendRedirect("UserListServlet");
+		return;
 
 	}
 

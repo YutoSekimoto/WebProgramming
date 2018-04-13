@@ -51,7 +51,7 @@ public class UserListServlet extends HttpServlet {
 		}
 
 		//管理者ログイン場合
-		if(userName.getName().equals("関本")) {
+		if(userName.getName().equals("sekimoto")) {
 
 			//データベースでユーザー一覧を取得
 			UserDao userDao = new UserDao();
